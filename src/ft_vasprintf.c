@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:26:12 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/10/29 00:26:54 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:57:05 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,52 +15,55 @@
 static int	ft_handle_spec(char **str_ptr, const char *fmt, va_list args)
 {
 	t_fmt_spec	*spec;
+	int			len;
 
 	spec = ft_parse_spec(fmt, args);
 	if (!spec)
 		return (0);
-	(void)spec;
+	len = 0;
 	(void)str_ptr;
-	return (0);
+	free(spec);
+	return (len);
 }
 
-static char	*ft_handle_len_increase(char **str_ptr, int *len, int len_increase)
-{
-	char	*new_str;
+static int	ft_copyback(
+		char **str_ptr,
+		const char *fmt,
+		int current_idx,
+		int *last_nofmt_idx
+) {
+	char	*tmp;
 
-	new_str = malloc(sizeof(char) * (*len + len_increase + 1));
-	if (!new_str)
-		return (NULL);
-	ft_memcpy(new_str, *str_ptr, *len);
-	free(*str_ptr);
-	*str_ptr = new_str;
-	*len += len_increase;
-	return (*str_ptr);
+	if (*last_nofmt_idx == -1)
+		return (0);
+	tmp = ft_substr(fmt, );
+	*last_nofmt_idx = -1;
 }
 
+//FIXME: we might be overallocating with ft_calloc if fmt has %%
 int	ft_vasprintf(char **str_ptr, const char *fmt, va_list args)
 {
-	int		len;
-	int		len_increase;
-	char	*str;
+	int	len;
+	int	i;
+	int	last_nofmt_idx;
 
 	len = 0;
-	str = ft_calloc(ft_strlen(fmt) + 1, sizeof(char));
-	if (!str)
+	i = -1;
+	last_nofmt_idx = -1;
+	*str_ptr = ft_calloc(ft_strlen(fmt) + 1, sizeof(char));
+	if (!*str_ptr)
 		return (-1);
-	while (*fmt)
+	while (fmt[++i])
 	{
-		if (*fmt == *PF_FORMAT_SYMBOL)
+		if (fmt[i] == *PF_FORMAT_SYMBOL)
 		{
-			len_increase = ft_handle_spec(&str, fmt, args);
-			if (len_increase == 0)
-				str[len++] = *PF_FORMAT_SYMBOL;
-			str = ft_handle_len_increase(&str, &len, len_increase);
+			len += ft_copyback(str_ptr, fmt, &last_nofmt_idx);
+			len += ft_handle_spec(str_ptr, fmt, args);
 		}
-		else
-			str[len++] = *fmt;
+		else if (last_nofmt_idx == -1)
+			last_nofmt_idx = i;
 	}
-	*str_ptr = str;
+	len += ft_copyback(str_ptr, fmt, &last_nofmt_idx);
 	return (len);
 }
 /*

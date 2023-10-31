@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 02:47:07 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/10/29 15:57:45 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:20:39 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,16 @@ static int	ft_fill_flags(const char *format, t_fmt_spec *spec)
 	spec->flags = 0;
 	while (format[i] && ft_strchr(PF_FLAGS, format[i]))
 	{
-		if (format[i] == '-')
+		if (format[i] == PF_FLAGS[0])
 			spec->flags |= LEFT_JUSTIFY;
-		else if (format[i] == '0')
+		else if (format[i] == PF_FLAGS[1])
 			spec->flags |= ZERO_PAD;
-		else if (format[i] == ' ')
+		else if (format[i] == PF_FLAGS[2])
 			spec->flags |= SPACE;
-		else if (format[i] == '+')
-			spec->flags |= PLUS;
-		else if (format[i] == '#')
+		else if (format[i] == PF_FLAGS[3])
 			spec->flags |= HASH;
+		else if (format[i] == PF_FLAGS[4])
+			spec->flags |= PLUS;
 		i++;
 	}
 	return (i);

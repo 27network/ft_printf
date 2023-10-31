@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:25:49 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/10/29 15:59:09 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:20:32 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 # define LEFT_JUSTIFY	1  // (1 << 0)
 # define ZERO_PAD		2  // (1 << 1)
 # define SPACE			4  // (1 << 2)
-# define PLUS			8  // (1 << 3)
-# define HASH			16 // (1 << 4)
+# define HASH			8  // (1 << 3)
+# define PLUS			16 // (1 << 4)
 
 typedef struct s_fmt_spec
 {
