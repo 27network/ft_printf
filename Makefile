@@ -6,7 +6,7 @@
 #    By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/26 14:20:06 by kiroussa          #+#    #+#              #
-#    Updated: 2023/10/29 00:17:30 by kiroussa         ###   ########.fr        #
+#    Updated: 2023/11/03 11:25:53 by kiroussa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ SRC_FILES	=	wrapper/ft_asprintf.c \
 				wrapper/ft_printf.c \
 				wrapper/ft_vdprintf.c \
 				wrapper/ft_vprintf.c \
+				ft_format_spec.c \
 				ft_parse_spec.c \
 				ft_vasprintf.c
 

@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:25:49 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/01 20:11:00 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/03 11:46:03 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,7 @@ typedef struct s_fmt_spec
 	char	*raw;
 }	t_fmt_spec;
 
-typedef struct s_type_formatter
-{
-	char	*specifier;
-	char	*(*parse)(va_list args);
-}	t_type_formatter;
+typedef char	*(*t_type_formatter)(t_fmt_spec *spec, va_list args);
 
 int			ft_printf(const char *format, ...);
 int			ft_dprintf(int fd, const char *format, ...);
@@ -68,10 +64,16 @@ int			ft_vdprintf(int fd, const char *format, va_list args);
 int			ft_asprintf(char **str_ptr, const char *format, ...);
 int			ft_vasprintf(char **str_ptr, const char *format, va_list args);
 
-TODO char	*ft_formatf(const char *format, ...);
-TODO char	*ft_vformatf(const char *format, va_list args);
-
 t_fmt_spec	*ft_parse_spec(const char *format, va_list args);
 char		*ft_format_spec(t_fmt_spec *spec, va_list args);
+void		ft_free_spec(t_fmt_spec *spec);
 
-#endif
+char		*ft_format_char(t_fmt_spec *spec, va_list args);
+char		*ft_format_string(t_fmt_spec *spec, va_list args);
+char		*ft_format_pointer(t_fmt_spec *spec, va_list args);
+char		*ft_format_int(t_fmt_spec *spec, va_list args);
+char		*ft_format_uint(t_fmt_spec *spec, va_list args);
+char		*ft_format_hex(t_fmt_spec *spec, va_list args);
+char		*ft_format_percent(t_fmt_spec *spec, va_list args);
+
+#endif // FT_PRINTF_H

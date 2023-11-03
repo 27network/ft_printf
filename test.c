@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 00:10:29 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/01 20:13:22 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/03 11:58:42 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	main(int ac, char *av[])
 {
 	(void)ac;
 	(void)av;
-//	test("This %% is %% a %% dumb %% test");
-//	test("%meow");
+	test("This %% is %% a %% dumb %% test");
+	test("%meow");
 	test("%-5s", "42");
 	test("%+5s", "42");
 	return (0);

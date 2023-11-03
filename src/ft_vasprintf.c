@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:26:12 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/01 19:43:55 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/03 12:10:54 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,6 @@ static void	ft_append(char **str_ptr, char *str)
 	}
 }
 
-static void	ft_free_spec(t_fmt_spec *spec)
-{
-	free(spec->raw);
-	free(spec->length);
-	free(spec);
-}
-
 static int	ft_handle_spec(
 		char **str_ptr,
 		const char *fmt,
@@ -46,8 +39,8 @@ static int	ft_handle_spec(
 	spec = ft_parse_spec(fmt, args);
 	if (!spec)
 		return (0);
-	*i += 1;
-	final_fmt = ft_strdup("%");
+	*i += 1 + ft_strlen(spec->raw);
+	final_fmt = ft_format_spec(spec, args);
 	ft_free_spec(spec);
 	len = ft_strlen(final_fmt);
 	ft_append(str_ptr, final_fmt);
@@ -83,18 +76,22 @@ int	ft_vasprintf(char **str_ptr, const char *fmt, va_list args)
 	int	last_nofmt_idx;
 
 	len = 0;
-	i = -1;
+	i = 0;
 	last_nofmt_idx = -1;
 	*str_ptr = NULL;
-	while (fmt[++i])
+	while (fmt[i])
 	{
 		if (fmt[i] == *PF_FORMAT_SYMBOL)
 		{
 			len += ft_copyback(str_ptr, fmt, i, &last_nofmt_idx);
-			len += ft_handle_spec(str_ptr, fmt, &i, args);
+			len += ft_handle_spec(str_ptr, &fmt[i] + 1, &i, args);
 		}
-		else if (last_nofmt_idx == -1)
-			last_nofmt_idx = i;
+		else
+		{
+			if (last_nofmt_idx == -1)
+				last_nofmt_idx = i;
+			i++;
+		}
 	}
 	len += ft_copyback(str_ptr, fmt, i, &last_nofmt_idx);
 	return (len);

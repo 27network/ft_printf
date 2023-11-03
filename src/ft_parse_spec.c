@@ -6,12 +6,12 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 02:47:07 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/01 20:12:58 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/03 11:58:00 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-/*
+
 static int	ft_fill_flags(const char *format, t_fmt_spec *spec)
 {
 	int	i;
@@ -34,7 +34,7 @@ static int	ft_fill_flags(const char *format, t_fmt_spec *spec)
 	}
 	return (i);
 }
-*/
+
 static int	ft_spec_length(const char *fmt_str)
 {
 	int	len;
@@ -58,6 +58,36 @@ static int	ft_spec_length(const char *fmt_str)
 	return (len);
 }
 
+static void	ft_fill_spec(t_fmt_spec *spec)
+{
+	char	*raw;
+
+	raw = spec->raw + ft_fill_flags(spec->raw, spec);
+	spec->width = ft_atoi(raw);
+	while (ft_isdigit(*raw))
+		raw++;
+	if (*raw == '.')
+	{
+		raw++;
+		spec->precision = ft_atoi(raw);
+		while (ft_isdigit(*raw))
+			raw++;
+	}
+	else
+		spec->precision = -1;
+	spec->length = ft_substr(raw, 0, ft_strlen(raw) - 1);
+	raw += ft_strlen(spec->length);
+	spec->specifier = *raw;
+}
+
+void	ft_free_spec(t_fmt_spec *spec)
+{
+	free(spec->raw);
+	free(spec->length);
+	free(spec);
+}
+
+//TODO: check spec->length
 t_fmt_spec	*ft_parse_spec(const char *fmt_str, va_list args)
 {
 	t_fmt_spec	*spec;
@@ -69,9 +99,11 @@ t_fmt_spec	*ft_parse_spec(const char *fmt_str, va_list args)
 		return (NULL);
 	len = ft_spec_length(fmt_str);
 	spec->raw = ft_substr(fmt_str, 0, len);
-	printf("spec: %s\n", spec->raw);
-//	rest = ft_substr(fmt_str, ft_fill_flags(fmt_str, spec), );
-	spec->length = malloc(1);
-//	free(rest);
+	ft_fill_spec(spec);
+	if (!ft_strchr(PF_SPECIFIERS, spec->specifier))
+	{
+		ft_free_spec(spec);
+		return (NULL);
+	}
 	return (spec);
 }
