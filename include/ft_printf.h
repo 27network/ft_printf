@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:25:49 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/03 11:46:03 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/05 02:02:49 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,11 @@ char		*ft_format_spec(t_fmt_spec *spec, va_list args);
 void		ft_free_spec(t_fmt_spec *spec);
 
 char		*ft_format_char(t_fmt_spec *spec, va_list args);
-char		*ft_format_string(t_fmt_spec *spec, va_list args);
-char		*ft_format_pointer(t_fmt_spec *spec, va_list args);
-char		*ft_format_int(t_fmt_spec *spec, va_list args);
-char		*ft_format_uint(t_fmt_spec *spec, va_list args);
 char		*ft_format_hex(t_fmt_spec *spec, va_list args);
+char		*ft_format_int(t_fmt_spec *spec, va_list args);
 char		*ft_format_percent(t_fmt_spec *spec, va_list args);
+char		*ft_format_pointer(t_fmt_spec *spec, va_list args);
+char		*ft_format_string(t_fmt_spec *spec, va_list args);
+char		*ft_format_uint(t_fmt_spec *spec, va_list args);
 
 #endif // FT_PRINTF_H

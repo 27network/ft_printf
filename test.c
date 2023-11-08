@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 00:10:29 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/03 11:58:42 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/05 02:16:51 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,26 +46,18 @@ int	main(int ac, char *av[])
 	test("%meow");
 	test("%-5s", "42");
 	test("%+5s", "42");
-	return (0);
-}
-
-/*
-int	main(int ac, char *av[])
-{
-	(void)ac;
-	(void)av;
-	ft_printf("%s", "Hello World!");
-	test("%x", 42);
-	test("%x", -42);
-	test("% x", 42);
-	test("% x", -42);
-	test("%+x", 42);
-	test("%+x", -42);
-	test("%+ x", 42);
-	test("%+ x", -42);
-	test("% +x", 42);
-	test("% +x", -42);
+	test("%+1d", 42);
+	test("%d", -42);
+	test("% d", 42);
+	test("% d", -42);
+	test("%+d", 42);
+	test("%+d", -42);
+	test("%+ d", 42);
+	test("%+ d", -42);
+	test("% +d", 42);
+	test("% +d", -42);
 	
+	/*
 	test("%5s", "42");
 	test("%-5s", "42");
 	test("%+5s", "42");
@@ -74,12 +66,12 @@ int	main(int ac, char *av[])
 	test("%+5d", 42);
 	test("%-+5d", 42);
 	test("%+-5d", 42);
-	//test("%03.3x", 6983);
+	test("%03.3x", 6983);
 	test(" %p ", 17);
 	test(" %p %p ", LONG_MIN, LONG_MAX);
 	test(" %p %p ", INT_MIN, INT_MAX);
 	test(" %p %p ", ULONG_MAX, -ULONG_MAX);
 	test(" %p %p ", 0, 0);
+*/
 	return (0);
 }
-*/

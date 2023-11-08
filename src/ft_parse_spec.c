@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 02:47:07 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/03 11:58:00 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/04 23:22:08 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,33 +58,35 @@ static int	ft_spec_length(const char *fmt_str)
 	return (len);
 }
 
-static void	ft_fill_spec(t_fmt_spec *spec)
+static char	*ft_parse_int(char *raw, int *ptr, va_list args)
+{
+	if (*raw == '*')
+	{
+		*ptr = va_arg(args, int);
+		raw++;
+	}
+	else
+	{
+		*ptr = ft_atoi(raw);
+		while (ft_isdigit(*raw))
+			raw++;
+	}
+	return (raw);
+}
+
+static void	ft_fill_spec(t_fmt_spec *spec, va_list args)
 {
 	char	*raw;
 
 	raw = spec->raw + ft_fill_flags(spec->raw, spec);
-	spec->width = ft_atoi(raw);
-	while (ft_isdigit(*raw))
-		raw++;
+	raw = ft_parse_int(raw, &spec->width, args);
 	if (*raw == '.')
-	{
-		raw++;
-		spec->precision = ft_atoi(raw);
-		while (ft_isdigit(*raw))
-			raw++;
-	}
+		raw = ft_parse_int(++raw, &spec->precision, args);
 	else
 		spec->precision = -1;
 	spec->length = ft_substr(raw, 0, ft_strlen(raw) - 1);
 	raw += ft_strlen(spec->length);
 	spec->specifier = *raw;
-}
-
-void	ft_free_spec(t_fmt_spec *spec)
-{
-	free(spec->raw);
-	free(spec->length);
-	free(spec);
 }
 
 //TODO: check spec->length
@@ -99,7 +101,7 @@ t_fmt_spec	*ft_parse_spec(const char *fmt_str, va_list args)
 		return (NULL);
 	len = ft_spec_length(fmt_str);
 	spec->raw = ft_substr(fmt_str, 0, len);
-	ft_fill_spec(spec);
+	ft_fill_spec(spec, args);
 	if (!ft_strchr(PF_SPECIFIERS, spec->specifier))
 	{
 		ft_free_spec(spec);

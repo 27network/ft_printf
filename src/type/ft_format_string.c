@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_parse_pointer.c                                 :+:      :+:    :+:   */
+/*   ft_format_string.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 15:20:27 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/10/27 22:56:04 by kiroussa         ###   ########.fr       */
+/*   Created: 2023/11/03 15:20:24 by kiroussa          #+#    #+#             */
+/*   Updated: 2023/11/04 22:47:25 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char	*ft_parse_pointer(const char *base, va_list args)
+char	*ft_format_string(t_fmt_spec *spec, va_list args)
 {
-	char				*str;
-	char				*final;
-	unsigned long long	ptr;
+	char	*str;
+	char	*formatted;
 
-	ptr = (unsigned long long) va_arg(args, void *);
-	if (ptr == 0)
-		return (ft_strdup("(nil)"));
-	str = ft_lltoa_base(ptr, base);
-	final = ft_strjoin("0x", str);
-	free(str);
-	return (final);
+	str = va_arg(args, char *);
+	if (!str)
+		str = "(null)";
+	if (spec->precision >= 0 && (size_t)spec->precision < ft_strlen(str))
+		formatted = ft_substr(str, 0, spec->precision);
+	else
+		formatted = ft_strdup(str);
+	return (formatted);
 }

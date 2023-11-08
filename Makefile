@@ -6,7 +6,7 @@
 #    By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/26 14:20:06 by kiroussa          #+#    #+#              #
-#    Updated: 2023/11/03 11:25:53 by kiroussa         ###   ########.fr        #
+#    Updated: 2023/11/04 23:22:45 by kiroussa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,19 @@ LIB			=	ftprintf
 STATIC_LIB	=	lib$(LIB).a
 NAME		=	$(STATIC_LIB)	
 
-SRC_FILES	=	wrapper/ft_asprintf.c \
+SRC_FILES	=	type/ft_format_char.c \
+				type/ft_format_hex.c \
+				type/ft_format_int.c \
+				type/ft_format_percent.c \
+				type/ft_format_pointer.c \
+				type/ft_format_string.c \
+				type/ft_format_uint.c \
+				wrapper/ft_asprintf.c \
 				wrapper/ft_dprintf.c \
 				wrapper/ft_printf.c \
 				wrapper/ft_vdprintf.c \
 				wrapper/ft_vprintf.c \
+				ft_free_spec.c \
 				ft_format_spec.c \
 				ft_parse_spec.c \
 				ft_vasprintf.c
