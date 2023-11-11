@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_format_int.c                                    :+:      :+:    :+:   */
+/*   ft_prepend_sign.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/04 22:56:43 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/11 03:50:19 by kiroussa         ###   ########.fr       */
+/*   Created: 2023/11/11 03:44:36 by kiroussa          #+#    #+#             */
+/*   Updated: 2023/11/11 03:47:03 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <string.h>
 
-char	*ft_format_int(t_fmt_spec *spec, va_list args)
+char	*ft_prepend_sign(t_fmt_spec *spec, char *str, int neg)
 {
-	long long	n;
-	char		*str;
-	char		*tmp;
-	int			neg;
+	char	*sign;
+	char	*tmp;
 
-	n = va_arg(args, int);
-	neg = n < 0;
 	if (neg)
-		n = -n;
-	if (n == 0 && spec->precision == 0)
-		str = ft_strdup("");
+		sign = ft_strdup("-");
+	else if (spec->flags & PF_PLUS)
+		sign = ft_strdup("+");
+	else if (spec->flags & PF_SPACE)
+		sign = ft_strdup(" ");
 	else
-		str = ft_lltoa(n);
-	tmp = ft_prepend_sign(spec, str, neg);
-	free(str);
+		return (ft_strdup(str));
+	tmp = ft_strjoin(sign, str);
+	free(sign);
 	return (tmp);
 }

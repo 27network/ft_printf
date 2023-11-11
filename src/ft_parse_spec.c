@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 02:47:07 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/04 23:22:08 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/11 05:55:38 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,25 @@ static int	ft_fill_flags(const char *format, t_fmt_spec *spec)
 static int	ft_spec_length(const char *fmt_str)
 {
 	int	len;
-	int	precision;
 
 	len = 0;
 	while (fmt_str[len] && ft_strchr(PF_FLAGS, fmt_str[len]))
 		len++;
-	while (ft_isdigit(fmt_str[len]))
+	if (fmt_str[len] == '*')
 		len++;
-	precision = fmt_str[len] == '.';
-	if (precision)
-		len++;
-	if (precision)
+	else
 		while (ft_isdigit(fmt_str[len]))
 			len++;
+	if (fmt_str[len] == '.')
+		len++;
+	if (fmt_str[len - 1] == '.')
+	{
+		if (fmt_str[len] == '*')
+			len++;
+		else
+			while (ft_isdigit(fmt_str[len]))
+				len++;
+	}
 	if (ft_strchr(PF_SPECIFIERS, fmt_str[len]))
 		len++;
 	else
@@ -80,8 +86,17 @@ static void	ft_fill_spec(t_fmt_spec *spec, va_list args)
 
 	raw = spec->raw + ft_fill_flags(spec->raw, spec);
 	raw = ft_parse_int(raw, &spec->width, args);
+	if (spec->width < 0)
+	{
+		spec->flags |= PF_LEFT_JUSTIFY;
+		spec->width *= -1;
+	}
 	if (*raw == '.')
+	{
 		raw = ft_parse_int(++raw, &spec->precision, args);
+		if (spec->precision < 0)
+			spec->precision = -1;
+	}
 	else
 		spec->precision = -1;
 	spec->length = ft_substr(raw, 0, ft_strlen(raw) - 1);
@@ -89,13 +104,11 @@ static void	ft_fill_spec(t_fmt_spec *spec, va_list args)
 	spec->specifier = *raw;
 }
 
-//TODO: check spec->length
 t_fmt_spec	*ft_parse_spec(const char *fmt_str, va_list args)
 {
 	t_fmt_spec	*spec;
 	int			len;
 
-	(void) args;
 	spec = malloc(sizeof(t_fmt_spec));
 	if (!spec)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:25:49 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/05 02:02:49 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/11 07:34:38 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ typedef struct s_fmt_spec
 
 typedef char	*(*t_type_formatter)(t_fmt_spec *spec, va_list args);
 
+/* Wrapper functions */
+
 int			ft_printf(const char *format, ...);
 int			ft_dprintf(int fd, const char *format, ...);
 int			ft_vprintf(const char *format, va_list args);
@@ -64,9 +66,16 @@ int			ft_vdprintf(int fd, const char *format, va_list args);
 int			ft_asprintf(char **str_ptr, const char *format, ...);
 int			ft_vasprintf(char **str_ptr, const char *format, va_list args);
 
+char		*ft_format(const char *format, ...);
+char		*ft_vformat(const char *format, va_list args);
+
+/* Parsing & formatting */
+
 t_fmt_spec	*ft_parse_spec(const char *format, va_list args);
-char		*ft_format_spec(t_fmt_spec *spec, va_list args);
+char		*ft_format_spec(t_fmt_spec *spec, va_list args, int *len);
 void		ft_free_spec(t_fmt_spec *spec);
+
+/* Formatters */
 
 char		*ft_format_char(t_fmt_spec *spec, va_list args);
 char		*ft_format_hex(t_fmt_spec *spec, va_list args);
@@ -75,5 +84,33 @@ char		*ft_format_percent(t_fmt_spec *spec, va_list args);
 char		*ft_format_pointer(t_fmt_spec *spec, va_list args);
 char		*ft_format_string(t_fmt_spec *spec, va_list args);
 char		*ft_format_uint(t_fmt_spec *spec, va_list args);
+
+/* Flag mutators */
+
+char		*ft_hash_mutator_prefix(t_fmt_spec *spec, char *str);
+
+char		*ft_leftjustify_mutator(t_fmt_spec *spec, char *str);
+
+char		*ft_padding_mutator(t_fmt_spec *spec, char *str);
+
+char		*ft_precision_mutator_str(t_fmt_spec *spec, char *str);
+char		*ft_precision_mutator_int(t_fmt_spec *spec, char *str);
+
+/* Utils */
+
+/**
+ * @brief	Prepends a sign to a string based on the format flags.
+ *
+ * @param	spec	The format specifier.
+ * @param	str		The string to prepend the sign to.
+ * @param	neg		Whether the number is negative.
+ *
+ * @return	The string with the sign prepended.
+ *
+ * @note	The string `str` must be freed by the caller.
+ */
+char		*ft_prepend_sign(t_fmt_spec *spec, char *str, int neg);
+char		*ft_strnjoin(char *s1, char *s2, size_t n2);
+char		*ft_strnjoin2(char *s1, size_t n1, char *s2, size_t n2);
 
 #endif // FT_PRINTF_H

@@ -6,21 +6,24 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:26:12 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/03 12:10:54 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/11 07:34:21 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static void	ft_append(char **str_ptr, char *str)
+static void	ft_append(char **str_ptr, char *str, int len)
 {
 	char	*buffer;
 
 	if (*str_ptr == NULL)
-		*str_ptr = ft_strdup(str);
+	{
+		*str_ptr = ft_strnew(len);
+		ft_memcpy(*str_ptr, str, len);
+	}
 	else
 	{
-		buffer = ft_strjoin(*str_ptr, str);
+		buffer = ft_strnjoin(*str_ptr, str, len);
 		free(*str_ptr);
 		*str_ptr = buffer;
 	}
@@ -40,10 +43,9 @@ static int	ft_handle_spec(
 	if (!spec)
 		return (0);
 	*i += 1 + ft_strlen(spec->raw);
-	final_fmt = ft_format_spec(spec, args);
+	final_fmt = ft_format_spec(spec, args, &len);
 	ft_free_spec(spec);
-	len = ft_strlen(final_fmt);
-	ft_append(str_ptr, final_fmt);
+	ft_append(str_ptr, final_fmt, len);
 	free(final_fmt);
 	return (len);
 }
@@ -63,7 +65,7 @@ static int	ft_copyback(
 	*last_nofmt_idx = -1;
 	if (!tmp)
 		return (0);
-	ft_append(str_ptr, tmp);
+	ft_append(str_ptr, tmp, ft_strlen(tmp));
 	length = ft_strlen(tmp);
 	free(tmp);
 	return (length);
@@ -75,6 +77,8 @@ int	ft_vasprintf(char **str_ptr, const char *fmt, va_list args)
 	int	i;
 	int	last_nofmt_idx;
 
+	if (!fmt)
+		return (-1);
 	len = 0;
 	i = 0;
 	last_nofmt_idx = -1;
@@ -82,10 +86,9 @@ int	ft_vasprintf(char **str_ptr, const char *fmt, va_list args)
 	while (fmt[i])
 	{
 		if (fmt[i] == *PF_FORMAT_SYMBOL)
-		{
 			len += ft_copyback(str_ptr, fmt, i, &last_nofmt_idx);
+		if (fmt[i] == *PF_FORMAT_SYMBOL)
 			len += ft_handle_spec(str_ptr, &fmt[i] + 1, &i, args);
-		}
 		else
 		{
 			if (last_nofmt_idx == -1)

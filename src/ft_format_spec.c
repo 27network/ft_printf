@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 11:24:30 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/04 23:43:08 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/11 06:03:31 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,56 +24,63 @@ static const t_type_formatter	g_formatters[] = {
 ['%'] = ft_format_percent,
 };
 
-static char	*ft_apply_formatters(t_fmt_spec *spec, va_list args)
+static char	*ft_apply_flag_mutators(t_fmt_spec *spec, char *str)
+{
+	if (spec->specifier == 's')
+		str = ft_precision_mutator_str(spec, str);
+	else if (ft_strchr("diuxX", spec->specifier))
+		str = ft_precision_mutator_int(spec, str);
+	if (spec->flags & PF_LEFT_JUSTIFY)
+		str = ft_leftjustify_mutator(spec, str);
+	if (!(spec->flags & PF_LEFT_JUSTIFY))
+		str = ft_padding_mutator(spec, str);
+	str = ft_hash_mutator_prefix(spec, str);
+	return (str);
+}
+
+static char	*ft_apply_formatters(t_fmt_spec *spec, va_list args, int *hnc)
 {
 	t_type_formatter	formatter;
+	char				*result;
 
+	result = NULL;
+	*hnc = 0;
 	if (ft_strchr(PF_SPECIFIERS, spec->specifier))
 	{
 		formatter = g_formatters[(int)spec->specifier];
 		if (formatter)
-			return (formatter(spec, args));
+			result = formatter(spec, args);
+		if (result && spec->specifier == 'c' && *result == '\0')
+		{
+			*hnc = 1;
+			free(result);
+			result = ft_strdup("a");
+		}
 	}
-	return (NULL);
+	return (result);
 }
 
-static char	*ft_pad(char *str, int n, char c, int left)
-{
-	char	*pad;
-	char	*tmp;
-
-	if (n <= (int)ft_strlen(str))
-		return (str);
-	n -= ft_strlen(str);
-	if (n < 0)
-		return (str);
-	pad = ft_calloc(n + 1, sizeof(char));
-	if (!pad)
-		return (NULL);
-	ft_memset(pad, c, n);
-	if (left)
-		tmp = ft_strjoin(str, pad);
-	else
-		tmp = ft_strjoin(pad, str);
-	free(pad);
-	free(str);
-	return (tmp);
-}
-
-char	*ft_format_spec(t_fmt_spec *spec, va_list args)
+char	*ft_format_spec(t_fmt_spec *spec, va_list args, int *len)
 {
 	char	*formatted;
+	int		has_null_char;
 
-	formatted = ft_apply_formatters(spec, args);
+	*len = 0;
+	formatted = ft_apply_formatters(spec, args, &has_null_char);
 	if (formatted)
 	{
-		if (spec->specifier == 'c' && formatted[0] == '\0')
-			spec->width--;
-		if (spec->width > 0)
-			formatted = ft_pad(formatted, spec->width, ' ',
-					spec->flags & PF_LEFT_JUSTIFY);
+		if (formatted && spec->specifier != '%')
+			formatted = ft_apply_flag_mutators(spec, formatted);
 		if (formatted)
-			return (formatted);
+			*len = ft_strlen(formatted);
+		if (has_null_char)
+			ft_strchr(formatted, 'a')[0] = '\0';
 	}
-	return (ft_strdup(spec->raw));
+	if (!formatted)
+	{
+		formatted = ft_strdup(spec->raw);
+		if (formatted)
+			*len = ft_strlen(formatted);
+	}
+	return (formatted);
 }

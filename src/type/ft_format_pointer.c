@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 22:47:46 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/04 23:03:40 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/11 06:15:04 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,26 @@ char	*ft_format_pointer(t_fmt_spec *spec, va_list args)
 	unsigned long long	n;
 	char				*str;
 	char				*tmp;
-	int					i;
 
+	(void) spec;
 	n = va_arg(args, unsigned long long);
-	if (n == 0 && spec->precision == 0)
-		str = ft_strdup("");
+	if (n == 0)
+		str = ft_strdup("(nil)");
 	else
 		str = ft_ulltoa_base(n, "0123456789abcdef");
 	if (!str)
 		return (NULL);
-	i = 16 - ft_strlen(str);
-	while (i-- > 0)
+	if (str[0] == '(')
+		return (str);
+	if (spec->precision > (int) ft_strlen(str))
 	{
-		tmp = ft_strjoin("0", str);
+		tmp = ft_strnew(spec->precision);
+		ft_memset(tmp, '0', spec->precision);
+		ft_memcpy(tmp + spec->precision - ft_strlen(str), str, ft_strlen(str));
 		free(str);
-		if (!tmp)
-			return (NULL);
 		str = tmp;
 	}
-	return (str);
+	tmp = ft_strjoin("0x", str);
+	free(str);
+	return (tmp);
 }
