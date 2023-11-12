@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:25:49 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/12 01:35:15 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/12 02:51:32 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 
 # include <stdarg.h>
 # include <stdlib.h>
-# include <stdio.h>
 # include <unistd.h>
 
 # ifndef PF_FORMAT_SYMBOL
@@ -96,6 +95,18 @@ char		*ft_padding_mutator(t_fmt_spec *spec, char *str);
 
 char		*ft_precision_mutator_str(t_fmt_spec *spec, char *str);
 char		*ft_precision_mutator_int(t_fmt_spec *spec, char *str);
+
+/* String */
+
+typedef struct s_str
+{
+	char	*inner;
+	size_t	length;
+}	t_str;
+
+void		ft_str_init(t_str *self, char **str_target);
+t_str		*ft_str_create(char *str, size_t length);
+t_str		*ft_str_append(t_str *self, t_str *other);
 
 /* Utils */
 
