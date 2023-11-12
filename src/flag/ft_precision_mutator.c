@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 03:57:51 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/11 06:06:18 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/11 23:31:05 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,19 @@ char	*ft_precision_mutator_int(t_fmt_spec *spec, char *str)
 {
 	char	*tmp;
 	int		len;
-	int		neg;
+	char	sign;
+	int		is_sign;
 
-	neg = *str == '-';
-	len = ft_strlen(str) - neg;
+	sign = *str;
+	is_sign = (sign == '+' || sign == '-' || sign == ' ');
+	len = ft_strlen(str) - is_sign;
 	if (spec->precision > len)
 	{
-		tmp = ft_strnew(spec->precision + neg);
-		ft_memset(tmp, '0', spec->precision + neg);
-		ft_memcpy(tmp + spec->precision - len + neg, str + neg, len);
-		if (neg)
-			tmp[0] = '-';
+		tmp = ft_strnew(spec->precision + is_sign);
+		ft_memset(tmp + is_sign, '0', spec->precision);
+		ft_memcpy(tmp + is_sign + spec->precision - len, str + is_sign, len);
+		if (is_sign)
+			tmp[0] = sign;
 		free(str);
 		return (tmp);
 	}

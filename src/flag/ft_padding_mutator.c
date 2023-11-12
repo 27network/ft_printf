@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 04:16:21 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/11 06:11:46 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/11 23:21:13 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*ft_padding_mutator(t_fmt_spec *spec, char *str)
 	char	*tmp;
 	int		len;
 	char	padding_char;
-	char	start_sign;
+	char	sign;
 	int		should_pad;
 
 	len = ft_strlen(str);
@@ -27,14 +27,14 @@ char	*ft_padding_mutator(t_fmt_spec *spec, char *str)
 		should_pad = spec->flags & PF_ZERO_PAD;
 		if (should_pad && spec->precision == -1 && spec->specifier != 's')
 			padding_char = '0';
-		start_sign = *str;
-		if ((start_sign == '-' || start_sign == '+') && padding_char == '0')
+		sign = *str;
+		if ((sign == '-' || sign == '+' || sign == ' ') && padding_char == '0')
 			*str = padding_char;
 		tmp = ft_strnew(spec->width);
 		ft_memset(tmp, padding_char, spec->width);
 		ft_memcpy(tmp + spec->width - len, str, len);
-		if ((start_sign == '-' || start_sign == '+') && padding_char == '0')
-			tmp[0] = start_sign;
+		if ((sign == '-' || sign == '+' || sign == ' ') && padding_char == '0')
+			tmp[0] = sign;
 		free(str);
 		return (tmp);
 	}

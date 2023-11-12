@@ -6,46 +6,26 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:26:12 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/11 07:59:35 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/12 02:18:32 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static void	ft_append(char **str_ptr, char *str, int len)
-{
-	char	*buffer;
-
-	if (*str_ptr == NULL)
-	{
-		*str_ptr = ft_strnew(len);
-		ft_memcpy(*str_ptr, str, len);
-	}
-	else
-	{
-		buffer = ft_strnjoin(*str_ptr, str, len);
-		free(*str_ptr);
-		*str_ptr = buffer;
-	}
-}
-
 static int	ft_handle_spec(
 		char **str_ptr,
-		const char *fmt,
-		int *i,
-		va_list args
+		t_fmt_spec *spec,
+		va_list args,
+		int length
 ) {
-	t_fmt_spec	*spec;
 	char		*final_fmt;
 	int			len;
 
-	spec = ft_parse_spec(fmt, args);
 	if (!spec)
 		return (0);
-	*i += 1 + ft_strlen(spec->raw);
 	final_fmt = ft_format_spec(spec, args, &len);
 	ft_free_spec(spec);
-	ft_append(str_ptr, final_fmt, len);
+	ft_append(str_ptr, length, final_fmt, len);
 	free(final_fmt);
 	return (len);
 }
@@ -53,19 +33,16 @@ static int	ft_handle_spec(
 static int	ft_copyback(
 		char **str_ptr,
 		const char *fmt,
-		int current_idx,
-		int *last_i
+		int copy_length,
+		int dest_len
 ) {
 	char	*tmp;
 	int		length;
 
-	if (*last_i == -1)
-		return (0);
-	tmp = ft_substr(fmt, *last_i, current_idx - *last_i);
-	*last_i = -1;
+	tmp = ft_substr(fmt, 0, copy_length);
 	if (!tmp)
 		return (0);
-	ft_append(str_ptr, tmp, ft_strlen(tmp));
+	ft_append(str_ptr, dest_len, tmp, ft_strlen(tmp));
 	length = ft_strlen(tmp);
 	free(tmp);
 	return (length);
@@ -73,9 +50,9 @@ static int	ft_copyback(
 
 int	ft_vasprintf(char **str_ptr, const char *fmt, va_list args)
 {
-	int	len;
-	int	i;
-	int	last_i;
+	int			len;
+	int			i;
+	int			last_i;
 
 	if (!fmt)
 		return (-1);
@@ -86,9 +63,13 @@ int	ft_vasprintf(char **str_ptr, const char *fmt, va_list args)
 	while (fmt[i])
 	{
 		if (fmt[i] == *PF_FORMAT_SYMBOL)
-			len += ft_copyback(str_ptr, fmt, i, &last_i);
-		if (fmt[i] == *PF_FORMAT_SYMBOL)
-			len += ft_handle_spec(str_ptr, &fmt[i] + 1, &i, args);
+		{
+			if (last_i != -1)
+				len += ft_copyback(str_ptr, fmt + last_i, i - last_i, len);
+			if (last_i != -1)
+				last_i = -1;
+			len += ft_handle_spec(str_ptr, ft_new_spec(&fmt[i] + 1, &i, args), args, len);
+		}
 		else
 		{
 			if (last_i == -1)
@@ -96,6 +77,7 @@ int	ft_vasprintf(char **str_ptr, const char *fmt, va_list args)
 			i++;
 		}
 	}
-	len += ft_copyback(str_ptr, fmt, i, &last_i);
+	if (last_i != -1)
+		len += ft_copyback(str_ptr, fmt + last_i, i - last_i, len);
 	return (len);
 }

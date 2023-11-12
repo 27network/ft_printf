@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:25:49 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/11 07:34:38 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/12 01:35:15 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ char		*ft_vformat(const char *format, va_list args);
 
 /* Parsing & formatting */
 
+t_fmt_spec	*ft_new_spec(const char *fmt, int *i, va_list args);
 t_fmt_spec	*ft_parse_spec(const char *format, va_list args);
 char		*ft_format_spec(t_fmt_spec *spec, va_list args, int *len);
 void		ft_free_spec(t_fmt_spec *spec);
@@ -110,7 +111,7 @@ char		*ft_precision_mutator_int(t_fmt_spec *spec, char *str);
  * @note	The string `str` must be freed by the caller.
  */
 char		*ft_prepend_sign(t_fmt_spec *spec, char *str, int neg);
-char		*ft_strnjoin(char *s1, char *s2, size_t n2);
-char		*ft_strnjoin2(char *s1, size_t n1, char *s2, size_t n2);
+char		*ft_strnjoin(char *s1, size_t n1, char *s2, size_t n2);
+void		ft_append(char **dest, int dest_len, char *src, int src_len);
 
 #endif // FT_PRINTF_H

@@ -1,35 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnjoin.c                                      :+:      :+:    :+:   */
+/*   ft_append.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 05:44:36 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/12 01:01:18 by kiroussa         ###   ########.fr       */
+/*   Created: 2023/11/12 01:34:12 by kiroussa          #+#    #+#             */
+/*   Updated: 2023/11/12 01:35:06 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char	*ft_strnjoin(char *s1, size_t n1, char *s2, size_t n2)
+void	ft_append(char **dest, int dest_len, char *src, int src_len)
 {
-	char	*tmp;
-	int		free_s1;
-	int		free_s2;
+	char	*buffer;
 
-	free_s1 = s1 == NULL;
-	free_s2 = s2 == NULL;
-	if (!s1)
-		s1 = ft_strnew(n1);
-	if (!s2)
-		s2 = ft_strnew(n2);
-	tmp = ft_strnew(n1 + n2);
-	ft_memcpy(tmp, s1, n1);
-	ft_memcpy(tmp + n1, s2, n2);
-	if (free_s1)
-		free(s1);
-	if (free_s2)
-		free(s2);
-	return (tmp);
+	if (*dest == NULL)
+	{
+		*dest = ft_strnew(src_len);
+		ft_memcpy(*dest, src, src_len);
+	}
+	else
+	{
+		buffer = ft_strnjoin(*dest, dest_len, src, src_len);
+		free(*dest);
+		*dest = buffer;
+	}
 }

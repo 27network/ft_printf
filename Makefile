@@ -6,7 +6,7 @@
 #    By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/26 14:20:06 by kiroussa          #+#    #+#              #
-#    Updated: 2023/11/11 06:22:23 by kiroussa         ###   ########.fr        #
+#    Updated: 2023/11/12 01:36:15 by kiroussa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC_FILES	=	flag/ft_hash_mutator.c \
 				type/ft_format_pointer.c \
 				type/ft_format_string.c \
 				type/ft_format_uint.c \
+				utils/ft_append.c \
 				utils/ft_prepend_sign.c \
 				utils/ft_strnjoin.c \
 				wrapper/ft_asprintf.c \
