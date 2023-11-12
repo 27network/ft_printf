@@ -6,7 +6,7 @@
 #    By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/26 14:20:06 by kiroussa          #+#    #+#              #
-#    Updated: 2023/11/12 01:36:15 by kiroussa         ###   ########.fr        #
+#    Updated: 2023/11/12 17:26:07 by kiroussa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,9 @@ SRC_FILES	=	flag/ft_hash_mutator.c \
 				flag/ft_leftjustify_mutator.c \
 				flag/ft_padding_mutator.c \
 				flag/ft_precision_mutator.c \
+				str/ft_str_append.c \
+				str/ft_str_create.c \
+				str/ft_str_init.c \
 				type/ft_format_char.c \
 				type/ft_format_hex.c \
 				type/ft_format_int.c \

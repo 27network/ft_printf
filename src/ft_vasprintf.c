@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:26:12 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/12 02:50:16 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/12 18:20:38 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,20 @@ static t_str	*ft_handle_format(
 		int *last_i,
 		va_list args
 ) {
-	return (NULL);
+	t_str		*str;
+	t_fmt_spec	*spec;
+
+	str = ft_str_create(NULL, 0);
+	if (!str)
+		return (NULL);
+	if (*last_i != -1)
+		str->length += ft_copyback(
+				&str->inner, fmt + *last_i, *i - *last_i, str->length);
+	if (*last_i != -1)
+		*last_i = -1;
+	spec = ft_new_spec(&fmt[*i] + 1, i, args);
+	str->length += ft_handle_spec(&str->inner, spec, args, str->length);
+	return (str);
 }
 
 int	ft_vasprintf(char **str_ptr, const char *fmt, va_list args)
@@ -65,7 +78,7 @@ int	ft_vasprintf(char **str_ptr, const char *fmt, va_list args)
 
 	if (!fmt)
 		return (-1);
-	ft_str_init(&str, str_ptr);
+	ft_str_init(&str, NULL, 0);
 	i = 0;
 	last_i = -1;
 	while (fmt[i])
@@ -79,7 +92,9 @@ int	ft_vasprintf(char **str_ptr, const char *fmt, va_list args)
 			i++;
 		}
 	}
+	*str_ptr = str.inner;
 	if (last_i != -1)
-		str.length += ft_copyback(str_ptr, fmt + last_i, i - last_i, str.length);
+		str.length += ft_copyback(
+				str_ptr, fmt + last_i, i - last_i, str.length);
 	return (str.length);
 }

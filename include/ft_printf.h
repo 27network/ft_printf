@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:25:49 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/12 02:51:32 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/12 17:45:51 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ typedef struct s_str
 	size_t	length;
 }	t_str;
 
-void		ft_str_init(t_str *self, char **str_target);
+void		ft_str_init(t_str *self, char *str, size_t length);
 t_str		*ft_str_create(char *str, size_t length);
 t_str		*ft_str_append(t_str *self, t_str *other);
 
