@@ -23,7 +23,7 @@ for SUBMODULE in $SUBMODULES; do
 done
 
 # Remove git files
-find . -name "./*/.git" -exec rm -rf {} \;
+find . -wholename "./*/.git" -exec rm -rf {} \;
 find . -name ".gitignore" -type f -exec rm -rf {} \;
 find . -name ".gitmodules" -type f -exec rm -rf {} \;
 find . -name ".gitattributes" -type f -exec rm -rf {} \;
