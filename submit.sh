@@ -4,6 +4,9 @@
 # Script that removes unwanted elements for submission to the moulinette
 #
 
+# Submit branch
+git checkout -b submit
+
 # Recreates all submodules as standalone files
 SUBMODULES=$(git config --file .gitmodules --get-regexp path | awk '{ print $2 }')
 for SUBMODULE in $SUBMODULES; do
@@ -38,10 +41,9 @@ if [ -f "Makefile" ]; then
 fi
 
 # Setup submit branch
-git checkout -b submit
 git add .
 git commit -sm "chore: submit branch setup"
-git push origin submit
+git push origin submit --force
 
 # Remove this script
 rm -rf submit.sh
