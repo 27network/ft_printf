@@ -22,6 +22,9 @@ for SUBMODULE in $SUBMODULES; do
 	cd ..
 done
 
+# Remove libft tests folder
+rm -rf ./libft/tests
+
 # Remove git files
 find . -wholename "./*/.git" -exec rm -rf {} \;
 find . -name ".gitignore" -type f -exec rm -rf {} \;
@@ -34,8 +37,11 @@ if [ -f "Makefile" ]; then
 	make fclean
 fi
 
-# Checkout to submit branch
+# Setup submit branch
 git checkout -b submit
+git add .
+git commit -sm "chore: submit branch setup"
+git push origin submit
 
 # Remove this script
 rm -rf submit.sh
