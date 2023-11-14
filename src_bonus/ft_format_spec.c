@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 11:24:30 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/12 18:28:21 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/11 06:03:31 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,20 @@ static const t_type_formatter	g_formatters[] = {
 ['X'] = ft_format_hex,
 ['%'] = ft_format_percent,
 };
+
+static char	*ft_apply_flag_mutators(t_fmt_spec *spec, char *str)
+{
+	if (spec->specifier == 's')
+		str = ft_precision_mutator_str(spec, str);
+	else if (ft_strchr("diuxX", spec->specifier))
+		str = ft_precision_mutator_int(spec, str);
+	if (spec->flags & PF_LEFT_JUSTIFY)
+		str = ft_leftjustify_mutator(spec, str);
+	if (!(spec->flags & PF_LEFT_JUSTIFY))
+		str = ft_padding_mutator(spec, str);
+	str = ft_hash_mutator_prefix(spec, str);
+	return (str);
+}
 
 static char	*ft_apply_formatters(t_fmt_spec *spec, va_list args, int *hnc)
 {
@@ -55,6 +69,8 @@ char	*ft_format_spec(t_fmt_spec *spec, va_list args, int *len)
 	formatted = ft_apply_formatters(spec, args, &has_null_char);
 	if (formatted)
 	{
+		if (formatted && spec->specifier != '%')
+			formatted = ft_apply_flag_mutators(spec, formatted);
 		if (formatted)
 			*len = ft_strlen(formatted);
 		if (has_null_char)

@@ -6,7 +6,7 @@
 #    By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/26 14:20:06 by kiroussa          #+#    #+#              #
-#    Updated: 2023/11/12 17:26:07 by kiroussa         ###   ########.fr        #
+#    Updated: 2023/11/12 18:32:11 by kiroussa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,7 @@ LIB			=	ftprintf
 STATIC_LIB	=	lib$(LIB).a
 NAME		=	$(STATIC_LIB)	
 
-SRC_FILES	=	flag/ft_hash_mutator.c \
-				flag/ft_leftjustify_mutator.c \
-				flag/ft_padding_mutator.c \
-				flag/ft_precision_mutator.c \
-				str/ft_str_append.c \
+SRC_FILES	=	str/ft_str_append.c \
 				str/ft_str_create.c \
 				str/ft_str_init.c \
 				type/ft_format_char.c \
@@ -43,6 +39,16 @@ SRC_FILES	=	flag/ft_hash_mutator.c \
 				ft_parse_spec.c \
 				ft_vasprintf.c
 
+BONUS_SRC	=	flag/ft_hash_mutator.c \
+				flag/ft_leftjustify_mutator.c \
+				flag/ft_padding_mutator.c \
+				flag/ft_precision_mutator.c
+
+BONUS_FOLDER=	src_bonus
+BONUS_SRC	+=	$(SRC_FILES)
+BONUS_SRC	:= 	$(addprefix $(BONUS_FOLDER)/, $(BONUS_SRC))
+BONUS_OBJ	= 	$(BONUS_SRC:.c=.o)
+
 SRC_FOLDER	= 	src
 SRC_FILES	:= 	$(addprefix $(SRC_FOLDER)/, $(SRC_FILES))
 OBJ			= 	$(SRC_FILES:.c=.o)
@@ -61,8 +67,6 @@ RM			=	rm -f
 
 all: $(LIBFT) $(NAME)
 
-bonus: all
-
 $(LIBFT):
 	make -C $(LIBFT_SRC) -j$(shell nproc)
 
@@ -70,9 +74,9 @@ $(NAME): $(OBJ)
 	cp $(LIBFT) $(STATIC_LIB)
 	$(AR) $(STATIC_LIB) $(OBJ)
 
-test: test.o 
-	$(CC) $(CFLAGS) $(COPTS) test.o $(STATIC_LIB) -o $(LIB)_tests
-	./$(LIB)_tests
+bonus: $(LIBFT) $(BONUS_OBJ)
+	cp $(LIBFT) $(STATIC_LIB)
+	$(AR) $(STATIC_LIB) $(BONUS_OBJ)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(COPTS) -c $< -o $@
@@ -87,4 +91,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus
