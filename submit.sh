@@ -40,10 +40,10 @@ if [ -f "Makefile" ]; then
 	make fclean
 fi
 
-# Setup submit branch
+# Remove this script
+rm -rf submit.sh
+
+# Move to submit branch
 git add .
 git commit -sm "chore: submit branch setup"
 git push origin submit --force
-
-# Remove this script
-rm -rf submit.sh
