@@ -23,7 +23,7 @@ for SUBMODULE in $SUBMODULES; do
 done
 
 # Remove git files
-find . -name ".git" -exec rm -rf {} \;
+find . -name "./*/.git" -exec rm -rf {} \;
 find . -name ".gitignore" -type f -exec rm -rf {} \;
 find . -name ".gitmodules" -type f -exec rm -rf {} \;
 find . -name ".gitattributes" -type f -exec rm -rf {} \;
@@ -33,6 +33,9 @@ find . -name ".git-blame-ignore-revs" -type f -exec rm -rf {} \;
 if [ -f "Makefile" ]; then
 	make fclean
 fi
+
+# Checkout to submit branch
+git checkout -b submit
 
 # Remove this script
 rm -rf submit.sh
