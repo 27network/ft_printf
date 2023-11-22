@@ -6,7 +6,7 @@
 /*   By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 02:47:07 by kiroussa          #+#    #+#             */
-/*   Updated: 2023/11/11 05:55:38 by kiroussa         ###   ########.fr       */
+/*   Updated: 2023/11/22 12:57:27 by kiroussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ t_fmt_spec	*ft_parse_spec(const char *fmt_str, va_list args)
 	len = ft_spec_length(fmt_str);
 	spec->raw = ft_substr(fmt_str, 0, len);
 	ft_fill_spec(spec, args);
+	spec->precision = -1;
 	if (!ft_strchr(PF_SPECIFIERS, spec->specifier))
 	{
 		ft_free_spec(spec);

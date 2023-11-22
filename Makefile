@@ -6,7 +6,7 @@
 #    By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/26 14:20:06 by kiroussa          #+#    #+#              #
-#    Updated: 2023/11/12 18:32:11 by kiroussa         ###   ########.fr        #
+#    Updated: 2023/11/22 14:39:09 by kiroussa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,13 +39,8 @@ SRC_FILES	=	str/ft_str_append.c \
 				ft_parse_spec.c \
 				ft_vasprintf.c
 
-BONUS_SRC	=	flag/ft_hash_mutator.c \
-				flag/ft_leftjustify_mutator.c \
-				flag/ft_padding_mutator.c \
-				flag/ft_precision_mutator.c
-
 BONUS_FOLDER=	src_bonus
-BONUS_SRC	+=	$(SRC_FILES)
+BONUS_SRC	=	$(SRC_FILES:.c=_bonus.c)
 BONUS_SRC	:= 	$(addprefix $(BONUS_FOLDER)/, $(BONUS_SRC))
 BONUS_OBJ	= 	$(BONUS_SRC:.c=.o)
 
