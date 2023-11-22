@@ -6,7 +6,7 @@
 #    By: kiroussa <oss@xtrm.me>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/26 14:20:06 by kiroussa          #+#    #+#              #
-#    Updated: 2023/11/22 14:39:09 by kiroussa         ###   ########.fr        #
+#    Updated: 2023/11/22 14:46:26 by kiroussa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,7 @@ bonus: $(LIBFT) $(BONUS_OBJ)
 	$(CC) $(CFLAGS) $(COPTS) -c $< -o $@
 
 clean:
-	$(RM) $(OBJ)
+	$(RM) $(OBJ) $(BONUS_OBJ)
 	make clean -C $(LIBFT_SRC)
 
 fclean: clean
