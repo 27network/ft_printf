@@ -12,6 +12,15 @@ SUBMODULES=$(git config --file .gitmodules --get-regexp path | awk '{ print $2 }
 for SUBMODULE in $SUBMODULES; do
 	# Get submodule info 
 	SUBMODULE_COMMIT=$(git config --file .gitmodules --get "submodule.$SUBMODULE.commit")
+	if [ -z "$SUBMODULE_COMMIT" ]; then
+		SUBMODULE_COMMIT=$(git submodule status $SUBMODULE | awk '{ print $1 }')
+	fi
+	if [ -z "$SUBMODULE_COMMIT" ]; then
+		SUBMODULE_COMMIT=$(git config --file .gitmodules --get "submodule.$SUBMODULE.branch")
+	fi
+	if [ -z "$SUBMODULE_COMMIT" ]; then
+		SUBMODULE_COMMIT="main"
+	fi
 	SUBMODULE_URL=$(git config --file .gitmodules --get "submodule.$SUBMODULE.url")
 	# Deinit submodule
 	git submodule deinit -f $SUBMODULE
