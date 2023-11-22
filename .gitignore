@@ -1,6 +1,0 @@
-ftprintf_tests
-test.c
-*.o
-*.a
-printfTester/
-pft_*/
